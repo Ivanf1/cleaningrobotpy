@@ -34,3 +34,9 @@ class TestCleaningRobot(TestCase):
         c.initialize_robot()
         c.execute_command(c.FORWARD)
         self.assertEqual(c.robot_status(), "(0,1,N)")
+
+    def test_should_move_left(self):
+        c = CleaningRobot()
+        c.initialize_robot()
+        c.execute_command(c.LEFT)
+        self.assertEqual(c.robot_status(), "(0,0,W)")
