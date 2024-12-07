@@ -77,6 +77,11 @@ class CleaningRobot:
             case self.FORWARD:
                 if not self.__is_position_valid(self.__get_future_position_after_forward_movement()):
                     raise CleaningRobotError
+                if self.obstacle_found():
+                    # The position of the obstacle is the position that the robot
+                    # would have had if it had moved forward
+                    x, y = self.__get_future_position_after_forward_movement()
+                    return f"{self.robot_status()},({x},{y})"
                 self.activate_wheel_motor()
                 self.__compute_new_position_on_forward()
             case self.LEFT:
@@ -132,8 +137,7 @@ class CleaningRobot:
         return x >= 0 and y >= 0
 
     def obstacle_found(self) -> bool:
-        # To be implemented
-        pass
+        return GPIO.input(self.INFRARED_PIN)
 
     def manage_cleaning_system(self) -> None:
         if self.ibs.get_charge_left() <= 10:
