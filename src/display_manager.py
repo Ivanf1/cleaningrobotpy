@@ -19,3 +19,7 @@ class DisplayManager:
 
         self.display.lcd_clear()
         self.display.lcd_string(f"R: ({rx},{ry},{rh}) - O: {obstacle_str} - B: {battery}%")
+
+    def update_display_low_power(self):
+        self.display.lcd_clear()
+        self.display.lcd_string(f"Low power, recharge needed")
