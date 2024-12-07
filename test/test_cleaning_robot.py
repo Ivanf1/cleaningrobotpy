@@ -117,3 +117,13 @@ class TestCleaningRobot(TestCase):
         mock_ibs.return_value = 12
         c.execute_command(c.FORWARD)
         display_mock.assert_called_once_with((0, 1, 'N'), None, 12)
+
+    @patch.object(DisplayManager, "update_display_info")
+    @patch.object(IBS, "get_charge_left")
+    def test_should_update_the_display_after_rotating_right(self, mock_ibs: Mock, display_mock: Mock):
+        r = Room(2, 2)
+        c = CleaningRobot(r)
+        c.initialize_robot()
+        mock_ibs.return_value = 12
+        c.execute_command(c.RIGHT)
+        display_mock.assert_called_once_with((0, 0, 'E'), None, 12)
