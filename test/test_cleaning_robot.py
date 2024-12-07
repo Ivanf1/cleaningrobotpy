@@ -64,3 +64,10 @@ class TestCleaningRobot(TestCase):
         c.initialize_robot()
         mock_gpio.return_value = True
         self.assertEqual(c.execute_command(c.FORWARD), "(0,0,N),(0,1)")
+
+    @patch.object(IBS, "get_charge_left")
+    def test_should_turn_on_the_cleaning_system_and_turn_off_the_led(self, mock_ibs: Mock):
+        c = CleaningRobot()
+        mock_ibs.return_value = 9
+        c.initialize_robot()
+        self.assertEqual(c.execute_command(c.FORWARD), "!(0,0,N)")
