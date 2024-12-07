@@ -149,3 +149,13 @@ class TestCleaningRobot(TestCase):
         mock_gpio.return_value = True
         c.execute_command(c.FORWARD)
         display_mock.assert_called_once_with((0, 0, 'N'), (0, 1), 12)
+
+    @patch.object(DisplayManager, "update_display_low_power")
+    @patch.object(IBS, "get_charge_left")
+    def test_should_update_the_display_on_low_power(self, mock_ibs: Mock, display_mock: Mock):
+        r = Room(2, 2)
+        c = CleaningRobot(r)
+        c.initialize_robot()
+        mock_ibs.return_value = 8
+        c.execute_command(c.FORWARD)
+        display_mock.assert_called_once()
