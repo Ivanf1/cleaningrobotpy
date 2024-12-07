@@ -83,6 +83,8 @@ class CleaningRobot:
             case self.RIGHT:
                 self.activate_rotation_motor(self.RIGHT)
                 self.__compute_new_heading_on_rotation(self.RIGHT)
+            case _:
+                raise CleaningRobotError
 
     def __compute_new_position_on_forward(self) -> None:
         match self.heading:
