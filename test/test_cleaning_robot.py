@@ -83,3 +83,14 @@ class TestCleaningRobot(TestCase):
         mock_ibs.return_value = 9
         c.initialize_robot()
         self.assertEqual(c.execute_command(c.FORWARD), "!(0,0,N)")
+
+    @patch.object(GPIO, "output")
+    @patch.object(IBS, "get_charge_left")
+    @patch.object(GPIO, "input")
+    def test_should_trigger_the_buzzer_if_obstacle_found(self, mock_gpio: Mock, mock_ibs: Mock, mock_buzzer: Mock):
+        c = CleaningRobot()
+        c.initialize_robot()
+        mock_gpio.return_value = True
+        mock_ibs.return_value = 12
+        c.execute_command(c.FORWARD)
+        mock_buzzer.assert_has_calls([call(c.BUZZER_PIN, GPIO.HIGH), call(c.BUZZER_PIN, GPIO.LOW)])
