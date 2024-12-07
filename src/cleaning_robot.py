@@ -1,5 +1,7 @@
 import time
 
+from src.room import Room
+
 DEPLOYMENT = False  # This variable is to understand whether you are deploying on the actual hardware
 
 try:
@@ -40,7 +42,7 @@ class CleaningRobot:
     RIGHT = 'r'
     FORWARD = 'f'
 
-    def __init__(self):
+    def __init__(self, room: Room):
         GPIO.setmode(GPIO.BOARD)
         GPIO.setwarnings(False)
         GPIO.setup(self.INFRARED_PIN, GPIO.IN)
@@ -65,6 +67,8 @@ class CleaningRobot:
         self.recharge_led_on = False
         self.cleaning_system_on = False
 
+        self.room = room
+
     def initialize_robot(self) -> None:
         self.pos_x = 0
         self.pos_y = 0
@@ -82,7 +86,7 @@ class CleaningRobot:
 
         match command:
             case self.FORWARD:
-                if not self.__is_position_valid(self.__get_future_position_after_forward_movement()):
+                if not self.room.is_position_valid(self.__get_future_position_after_forward_movement()):
                     raise CleaningRobotError
 
                 if self.obstacle_found():
