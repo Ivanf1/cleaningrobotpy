@@ -1,5 +1,6 @@
 import time
 
+from src.display_manager import DisplayManager
 from src.room import Room
 
 DEPLOYMENT = False  # This variable is to understand whether you are deploying on the actual hardware
@@ -69,6 +70,8 @@ class CleaningRobot:
 
         self.room = room
 
+        self.display_manager = DisplayManager(ic2)
+
     def initialize_robot(self) -> None:
         self.pos_x = 0
         self.pos_y = 0
@@ -95,6 +98,7 @@ class CleaningRobot:
 
                 self.activate_wheel_motor()
                 self.__compute_new_position_on_forward()
+                self.display_manager.update_display_info((self.pos_x, self.pos_y, self.heading), None, self.ibs.get_charge_left())
             case self.LEFT:
                 self.activate_rotation_motor(self.LEFT)
                 self.__compute_new_heading_on_rotation(self.LEFT)
