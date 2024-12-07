@@ -73,6 +73,15 @@ class CleaningRobot:
         return f"({self.pos_x},{self.pos_y},{self.heading})"
 
     def execute_command(self, command: str) -> str:
+        charge_left = self.ibs.get_charge_left()
+
+        if charge_left <= 10:
+            GPIO.output(self.CLEANING_SYSTEM_PIN, False)
+            GPIO.output(self.RECHARGE_LED_PIN, True)
+            self.cleaning_system_on = False
+            self.recharge_led_on = True
+            return f"!{self.robot_status()}"
+
         match command:
             case self.FORWARD:
                 if not self.__is_position_valid(self.__get_future_position_after_forward_movement()):
