@@ -57,3 +57,10 @@ class TestCleaningRobot(TestCase):
         c.initialize_robot()
         c.execute_command(c.LEFT)
         self.assertRaises(CleaningRobotError, c.execute_command, c.FORWARD)
+
+    @patch.object(GPIO, "input")
+    def test_should_not_move_forward_if_obstacle_found(self, mock_gpio: Mock):
+        c = CleaningRobot()
+        c.initialize_robot()
+        mock_gpio.return_value = True
+        self.assertEqual(c.execute_command(c.FORWARD), "(0,0,N),(0,1)")
