@@ -73,8 +73,19 @@ class CleaningRobot:
         return f"({self.pos_x},{self.pos_y},{self.heading})"
 
     def execute_command(self, command: str) -> str:
-        # To be implemented
-        pass
+        match command:
+            case self.FORWARD:
+                self.activate_wheel_motor()
+                match self.heading:
+                    case self.N:
+                        self.pos_y += 1
+                    case self.S:
+                        self.pos_y -= 1
+                    case self.E:
+                        self.pos_x += 1
+                    case self.W:
+                        self.pos_x -= 1
+
 
     def obstacle_found(self) -> bool:
         # To be implemented
