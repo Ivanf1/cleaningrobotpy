@@ -51,3 +51,9 @@ class TestCleaningRobot(TestCase):
         c = CleaningRobot()
         c.initialize_robot()
         self.assertRaises(CleaningRobotError, c.execute_command, "U")
+
+    def test_should_raise_error_on_invalid_movement_out_of_bound(self):
+        c = CleaningRobot()
+        c.initialize_robot()
+        c.execute_command(c.LEFT)
+        self.assertRaises(CleaningRobotError, c.execute_command, c.FORWARD)
