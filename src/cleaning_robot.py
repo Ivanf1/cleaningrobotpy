@@ -78,10 +78,7 @@ class CleaningRobot:
                 if not self.__is_position_valid(self.__get_future_position_after_forward_movement()):
                     raise CleaningRobotError
                 if self.obstacle_found():
-                    # The position of the obstacle is the position that the robot
-                    # would have had if it had moved forward
-                    x, y = self.__get_future_position_after_forward_movement()
-                    return f"{self.robot_status()},({x},{y})"
+                    return f"{self.robot_status()},{self.__get_obstacle_position_str()}"
                 self.activate_wheel_motor()
                 self.__compute_new_position_on_forward()
             case self.LEFT:
@@ -135,6 +132,15 @@ class CleaningRobot:
     def __is_position_valid(self, position: tuple[int, int]) -> bool:
         x, y = position
         return x >= 0 and y >= 0
+
+    def __get_obstacle_position(self) -> tuple[int, int]:
+        # The position of the obstacle is the position that the robot
+        # would have had if it had moved forward
+        return self.__get_future_position_after_forward_movement()
+
+    def __get_obstacle_position_str(self) -> str:
+        x, y = self.__get_obstacle_position()
+        return f"({x},{y})"
 
     def obstacle_found(self) -> bool:
         return GPIO.input(self.INFRARED_PIN)
