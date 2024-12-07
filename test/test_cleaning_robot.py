@@ -137,3 +137,15 @@ class TestCleaningRobot(TestCase):
         mock_ibs.return_value = 12
         c.execute_command(c.LEFT)
         display_mock.assert_called_once_with((0, 0, 'W'), None, 12)
+
+    @patch.object(GPIO, "input")
+    @patch.object(DisplayManager, "update_display_info")
+    @patch.object(IBS, "get_charge_left")
+    def test_should_update_the_display_on_obstacle_found(self, mock_ibs: Mock, display_mock: Mock, mock_gpio: Mock):
+        r = Room(2, 2)
+        c = CleaningRobot(r)
+        c.initialize_robot()
+        mock_ibs.return_value = 12
+        mock_gpio.return_value = True
+        c.execute_command(c.FORWARD)
+        display_mock.assert_called_once_with((0, 0, 'N'), (0, 1), 12)
