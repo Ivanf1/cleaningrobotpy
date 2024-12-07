@@ -77,6 +77,11 @@ class CleaningRobot:
             case self.FORWARD:
                 self.activate_wheel_motor()
                 self.__compute_new_position_on_forward()
+            case self.LEFT:
+                self.activate_rotation_motor(self.LEFT)
+                headings = (self.N, self.E, self.S, self.W)
+                new_heading = (headings.index(self.heading) - 1) % 4
+                self.heading = headings[new_heading]
 
     def __compute_new_position_on_forward(self) -> None:
         match self.heading:
