@@ -94,6 +94,7 @@ class CleaningRobot:
 
                 if self.obstacle_found():
                     self.__play_buzzer_tone()
+                    self.display_manager.update_display_info((self.pos_x, self.pos_y, self.heading), self.__get_obstacle_position(), self.ibs.get_charge_left())
                     return f"{self.robot_status()},{self.__get_obstacle_position_str()}"
 
                 self.activate_wheel_motor()
