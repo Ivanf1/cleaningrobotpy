@@ -85,6 +85,7 @@ class CleaningRobot:
 
         if charge_left <= 10:
             self.__enter_low_power_mode()
+            self.display_manager.update_display_low_power()
             return f"!{self.robot_status()}"
 
         match command:
