@@ -76,10 +76,7 @@ class CleaningRobot:
         charge_left = self.ibs.get_charge_left()
 
         if charge_left <= 10:
-            GPIO.output(self.CLEANING_SYSTEM_PIN, False)
-            GPIO.output(self.RECHARGE_LED_PIN, True)
-            self.cleaning_system_on = False
-            self.recharge_led_on = True
+            self.__enter_low_power_mode()
             return f"!{self.robot_status()}"
 
         match command:
@@ -156,15 +153,21 @@ class CleaningRobot:
 
     def manage_cleaning_system(self) -> None:
         if self.ibs.get_charge_left() <= 10:
-            GPIO.output(self.CLEANING_SYSTEM_PIN, GPIO.LOW)
-            GPIO.output(self.RECHARGE_LED_PIN, GPIO.HIGH)
-            self.cleaning_system_on = False
-            self.recharge_led_on = True
+            self.__enter_low_power_mode()
         else:
-            GPIO.output(self.CLEANING_SYSTEM_PIN, GPIO.HIGH)
-            GPIO.output(self.RECHARGE_LED_PIN, GPIO.LOW)
-            self.cleaning_system_on = True
-            self.recharge_led_on = False
+            self.__enter_cleaning_mode()
+
+    def __enter_cleaning_mode(self) -> None:
+        GPIO.output(self.CLEANING_SYSTEM_PIN, True)
+        GPIO.output(self.RECHARGE_LED_PIN, False)
+        self.cleaning_system_on = True
+        self.recharge_led_on = False
+
+    def __enter_low_power_mode(self) -> None:
+        GPIO.output(self.CLEANING_SYSTEM_PIN, False)
+        GPIO.output(self.RECHARGE_LED_PIN, True)
+        self.cleaning_system_on = False
+        self.recharge_led_on = True
 
     def activate_wheel_motor(self) -> None:
         """
