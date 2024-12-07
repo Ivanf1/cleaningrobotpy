@@ -102,6 +102,7 @@ class CleaningRobot:
             case self.LEFT:
                 self.activate_rotation_motor(self.LEFT)
                 self.__compute_new_heading_on_rotation(self.LEFT)
+                self.display_manager.update_display_info((self.pos_x, self.pos_y, self.heading), None, self.ibs.get_charge_left())
             case self.RIGHT:
                 self.activate_rotation_motor(self.RIGHT)
                 self.__compute_new_heading_on_rotation(self.RIGHT)
