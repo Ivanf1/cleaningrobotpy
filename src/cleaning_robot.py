@@ -76,16 +76,18 @@ class CleaningRobot:
         match command:
             case self.FORWARD:
                 self.activate_wheel_motor()
-                match self.heading:
-                    case self.N:
-                        self.pos_y += 1
-                    case self.S:
-                        self.pos_y -= 1
-                    case self.E:
-                        self.pos_x += 1
-                    case self.W:
-                        self.pos_x -= 1
+                self.__compute_new_position_on_forward()
 
+    def __compute_new_position_on_forward(self) -> None:
+        match self.heading:
+            case self.N:
+                self.pos_y += 1
+            case self.S:
+                self.pos_y -= 1
+            case self.E:
+                self.pos_x += 1
+            case self.W:
+                self.pos_x -= 1
 
     def obstacle_found(self) -> bool:
         # To be implemented
