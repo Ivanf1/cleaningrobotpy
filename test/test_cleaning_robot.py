@@ -29,40 +29,52 @@ class TestCleaningRobot(TestCase):
         c.manage_cleaning_system()
         mock_gpio.assert_has_calls([call(c.CLEANING_SYSTEM_PIN, GPIO.HIGH), call(c.RECHARGE_LED_PIN, GPIO.LOW)])
 
-    def test_should_move_forward(self):
+    @patch.object(IBS, "get_charge_left")
+    def test_should_move_forward(self, mock_ibs: Mock):
         c = CleaningRobot()
         c.initialize_robot()
+        mock_ibs.return_value = 12
         c.execute_command(c.FORWARD)
         self.assertEqual(c.robot_status(), "(0,1,N)")
 
-    def test_should_move_left(self):
+    @patch.object(IBS, "get_charge_left")
+    def test_should_move_left(self, mock_ibs: Mock):
         c = CleaningRobot()
         c.initialize_robot()
+        mock_ibs.return_value = 12
         c.execute_command(c.LEFT)
         self.assertEqual(c.robot_status(), "(0,0,W)")
 
-    def test_should_rotate_right(self):
+    @patch.object(IBS, "get_charge_left")
+    def test_should_rotate_right(self, mock_ibs: Mock):
         c = CleaningRobot()
         c.initialize_robot()
+        mock_ibs.return_value = 12
         c.execute_command(c.RIGHT)
         self.assertEqual(c.robot_status(), "(0,0,E)")
 
-    def test_should_raise_error_on_invalid_movement_command(self):
+    @patch.object(IBS, "get_charge_left")
+    def test_should_raise_error_on_invalid_movement_command(self, mock_ibs: Mock):
         c = CleaningRobot()
         c.initialize_robot()
+        mock_ibs.return_value = 12
         self.assertRaises(CleaningRobotError, c.execute_command, "U")
 
-    def test_should_raise_error_on_invalid_movement_out_of_bound(self):
+    @patch.object(IBS, "get_charge_left")
+    def test_should_raise_error_on_invalid_movement_out_of_bound(self, mock_ibs: Mock):
         c = CleaningRobot()
         c.initialize_robot()
+        mock_ibs.return_value = 12
         c.execute_command(c.LEFT)
         self.assertRaises(CleaningRobotError, c.execute_command, c.FORWARD)
 
+    @patch.object(IBS, "get_charge_left")
     @patch.object(GPIO, "input")
-    def test_should_not_move_forward_if_obstacle_found(self, mock_gpio: Mock):
+    def test_should_not_move_forward_if_obstacle_found(self, mock_gpio: Mock, mock_ibs: Mock):
         c = CleaningRobot()
         c.initialize_robot()
         mock_gpio.return_value = True
+        mock_ibs.return_value = 12
         self.assertEqual(c.execute_command(c.FORWARD), "(0,0,N),(0,1)")
 
     @patch.object(IBS, "get_charge_left")
