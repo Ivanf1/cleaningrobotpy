@@ -4,6 +4,7 @@ from unittest.mock import Mock, patch, call
 from mock import GPIO
 from mock.ibs import IBS
 from src.cleaning_robot import CleaningRobot, CleaningRobotError
+from src.display_manager import DisplayManager
 from src.room import Room
 
 
@@ -106,3 +107,13 @@ class TestCleaningRobot(TestCase):
         mock_ibs.return_value = 12
         c.execute_command(c.FORWARD)
         mock_buzzer.assert_has_calls([call(c.BUZZER_PIN, GPIO.HIGH), call(c.BUZZER_PIN, GPIO.LOW)])
+
+    @patch.object(DisplayManager, "update_display_info")
+    @patch.object(IBS, "get_charge_left")
+    def test_should_update_the_display_after_moving_forward(self, mock_ibs: Mock, display_mock: Mock):
+        r = Room(2, 2)
+        c = CleaningRobot(r)
+        c.initialize_robot()
+        mock_ibs.return_value = 12
+        c.execute_command(c.FORWARD)
+        display_mock.assert_called_once_with((0, 1, 'N'), None, 12)
