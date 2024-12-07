@@ -75,6 +75,9 @@ class CleaningRobot:
     def execute_command(self, command: str) -> str:
         match command:
             case self.FORWARD:
+                if (self.heading == self.S and self.pos_y - 1 < 0) or \
+                    (self.heading == self.W and self.pos_x - 1 < 0):
+                    raise CleaningRobotError
                 self.activate_wheel_motor()
                 self.__compute_new_position_on_forward()
             case self.LEFT:
