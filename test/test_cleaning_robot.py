@@ -3,7 +3,7 @@ from unittest.mock import Mock, patch, call
 
 from mock import GPIO
 from mock.ibs import IBS
-from src.cleaning_robot import CleaningRobot
+from src.cleaning_robot import CleaningRobot, CleaningRobotError
 
 
 class TestCleaningRobot(TestCase):
@@ -46,3 +46,8 @@ class TestCleaningRobot(TestCase):
         c.initialize_robot()
         c.execute_command(c.RIGHT)
         self.assertEqual(c.robot_status(), "(0,0,E)")
+
+    def test_should_raise_error_on_invalid_movement_command(self):
+        c = CleaningRobot()
+        c.initialize_robot()
+        self.assertRaises(CleaningRobotError, c.execute_command, "U")
