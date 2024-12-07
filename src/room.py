@@ -11,4 +11,5 @@ class Room:
             self.max_y = 2
 
     def is_position_valid(self, position: tuple[int, int]) -> bool:
-        pass
+        x, y = position
+        return 0 <= x <= self.max_x and 0 <= y <= self.max_y
