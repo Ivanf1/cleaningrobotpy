@@ -13,6 +13,9 @@ class DisplayManager:
         rx, ry, rh = robot_position
         if obstacle_position is None:
             obstacle_str = "*****"
+        else:
+            ox, oy = obstacle_position
+            obstacle_str = f"({ox},{oy})"
 
         self.display.lcd_clear()
         self.display.lcd_string(f"R: ({rx},{ry},{rh}) - O: {obstacle_str} - B: {battery}%")
