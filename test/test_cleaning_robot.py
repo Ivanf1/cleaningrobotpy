@@ -28,3 +28,9 @@ class TestCleaningRobot(TestCase):
         mock_ibs.return_value = 12
         c.manage_cleaning_system()
         mock_gpio.assert_has_calls([call(c.CLEANING_SYSTEM_PIN, GPIO.HIGH), call(c.RECHARGE_LED_PIN, GPIO.LOW)])
+
+    def test_should_move_forward(self):
+        c = CleaningRobot()
+        c.initialize_robot()
+        c.execute_command(c.FORWARD)
+        self.assertEqual(c.robot_status(), "(0,1,N)")
