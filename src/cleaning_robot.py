@@ -94,20 +94,20 @@ class CleaningRobot:
 
                 if self.obstacle_found():
                     self.__play_buzzer_tone()
-                    self.display_manager.update_display_info((self.pos_x, self.pos_y, self.heading), self.__get_obstacle_position(), self.ibs.get_charge_left())
+                    self.__update_display_info(with_obstacle=True)
                     return f"{self.robot_status()},{self.__get_obstacle_position_str()}"
 
                 self.activate_wheel_motor()
                 self.__compute_new_position_on_forward()
-                self.display_manager.update_display_info((self.pos_x, self.pos_y, self.heading), None, self.ibs.get_charge_left())
+                self.__update_display_info(with_obstacle=False)
             case self.LEFT:
                 self.activate_rotation_motor(self.LEFT)
                 self.__compute_new_heading_on_rotation(self.LEFT)
-                self.display_manager.update_display_info((self.pos_x, self.pos_y, self.heading), None, self.ibs.get_charge_left())
+                self.__update_display_info(with_obstacle=False)
             case self.RIGHT:
                 self.activate_rotation_motor(self.RIGHT)
                 self.__compute_new_heading_on_rotation(self.RIGHT)
-                self.display_manager.update_display_info((self.pos_x, self.pos_y, self.heading), None, self.ibs.get_charge_left())
+                self.__update_display_info(with_obstacle=False)
             case _:
                 raise CleaningRobotError
 
@@ -189,6 +189,13 @@ class CleaningRobot:
         if DEPLOYMENT:
             time.sleep(0.2)
         GPIO.output(self.BUZZER_PIN, GPIO.LOW)
+
+    def __update_display_info(self, with_obstacle: bool):
+        if with_obstacle:
+            obstacle_position = self.__get_obstacle_position()
+        else:
+            obstacle_position = None
+        self.display_manager.update_display_info((self.pos_x, self.pos_y, self.heading), obstacle_position, self.ibs.get_charge_left())
 
     def activate_wheel_motor(self) -> None:
         """
