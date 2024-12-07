@@ -162,22 +162,22 @@ class CleaningRobot:
             self.__enter_cleaning_mode()
 
     def __enter_cleaning_mode(self) -> None:
-        GPIO.output(self.CLEANING_SYSTEM_PIN, True)
-        GPIO.output(self.RECHARGE_LED_PIN, False)
+        GPIO.output(self.CLEANING_SYSTEM_PIN, GPIO.HIGH)
+        GPIO.output(self.RECHARGE_LED_PIN, GPIO.LOW)
         self.cleaning_system_on = True
         self.recharge_led_on = False
 
     def __enter_low_power_mode(self) -> None:
-        GPIO.output(self.CLEANING_SYSTEM_PIN, False)
-        GPIO.output(self.RECHARGE_LED_PIN, True)
+        GPIO.output(self.CLEANING_SYSTEM_PIN, GPIO.LOW)
+        GPIO.output(self.RECHARGE_LED_PIN, GPIO.HIGH)
         self.cleaning_system_on = False
         self.recharge_led_on = True
 
     def __play_buzzer_tone(self) -> None:
-        GPIO.output(self.BUZZER_PIN, True)
+        GPIO.output(self.BUZZER_PIN, GPIO.HIGH)
         if DEPLOYMENT:
             time.sleep(0.2)
-        GPIO.output(self.BUZZER_PIN, False)
+        GPIO.output(self.BUZZER_PIN, GPIO.LOW)
 
     def activate_wheel_motor(self) -> None:
         """
