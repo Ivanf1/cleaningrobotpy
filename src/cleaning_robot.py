@@ -79,14 +79,10 @@ class CleaningRobot:
                 self.__compute_new_position_on_forward()
             case self.LEFT:
                 self.activate_rotation_motor(self.LEFT)
-                headings = (self.N, self.E, self.S, self.W)
-                new_heading = (headings.index(self.heading) - 1) % 4
-                self.heading = headings[new_heading]
+                self.__compute_new_heading_on_rotation(self.LEFT)
             case self.RIGHT:
                 self.activate_rotation_motor(self.RIGHT)
-                headings = (self.N, self.E, self.S, self.W)
-                new_heading = (headings.index(self.heading) + 1) % 4
-                self.heading = headings[new_heading]
+                self.__compute_new_heading_on_rotation(self.RIGHT)
 
     def __compute_new_position_on_forward(self) -> None:
         match self.heading:
@@ -98,6 +94,18 @@ class CleaningRobot:
                 self.pos_x += 1
             case self.W:
                 self.pos_x -= 1
+
+    def __compute_new_heading_on_rotation(self, direction: str) -> None:
+        headings = (self.N, self.E, self.S, self.W)
+        new_heading = None
+
+        match direction:
+            case self.LEFT:
+                new_heading = (headings.index(self.heading) - 1) % 4
+            case self.RIGHT:
+                new_heading = (headings.index(self.heading) + 1) % 4
+
+        self.heading = headings[new_heading]
 
     def obstacle_found(self) -> bool:
         # To be implemented
