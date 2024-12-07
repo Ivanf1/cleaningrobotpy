@@ -18,6 +18,7 @@ class CleaningRobot:
     RECHARGE_LED_PIN = 12
     CLEANING_SYSTEM_PIN = 13
     INFRARED_PIN = 15
+    BUZZER_PIN = 36
 
     # Wheel motor pins
     PWMA = 16
@@ -83,8 +84,11 @@ class CleaningRobot:
             case self.FORWARD:
                 if not self.__is_position_valid(self.__get_future_position_after_forward_movement()):
                     raise CleaningRobotError
+
                 if self.obstacle_found():
+                    self.__play_buzzer_tone()
                     return f"{self.robot_status()},{self.__get_obstacle_position_str()}"
+
                 self.activate_wheel_motor()
                 self.__compute_new_position_on_forward()
             case self.LEFT:
@@ -168,6 +172,12 @@ class CleaningRobot:
         GPIO.output(self.RECHARGE_LED_PIN, True)
         self.cleaning_system_on = False
         self.recharge_led_on = True
+
+    def __play_buzzer_tone(self) -> None:
+        GPIO.output(self.BUZZER_PIN, True)
+        if DEPLOYMENT:
+            time.sleep(0.2)
+        GPIO.output(self.BUZZER_PIN, False)
 
     def activate_wheel_motor(self) -> None:
         """
