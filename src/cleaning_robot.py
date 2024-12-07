@@ -75,8 +75,7 @@ class CleaningRobot:
     def execute_command(self, command: str) -> str:
         match command:
             case self.FORWARD:
-                if (self.heading == self.S and self.pos_y - 1 < 0) or \
-                    (self.heading == self.W and self.pos_x - 1 < 0):
+                if not self.__is_position_valid(self.__get_future_position_after_forward_movement()):
                     raise CleaningRobotError
                 self.activate_wheel_motor()
                 self.__compute_new_position_on_forward()
@@ -111,6 +110,26 @@ class CleaningRobot:
                 new_heading = (headings.index(self.heading) + 1) % 4
 
         self.heading = headings[new_heading]
+
+    def __get_future_position_after_forward_movement(self) -> tuple[int, int]:
+        x = self.pos_x
+        y = self.pos_y
+
+        match self.heading:
+            case self.N:
+                y += 1
+            case self.S:
+                y -= 1
+            case self.E:
+                x += 1
+            case self.W:
+                x -= 1
+
+        return x, y
+
+    def __is_position_valid(self, position: tuple[int, int]) -> bool:
+        x, y = position
+        return x >= 0 and y >= 0
 
     def obstacle_found(self) -> bool:
         # To be implemented
