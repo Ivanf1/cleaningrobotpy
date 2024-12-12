@@ -151,10 +151,6 @@ class CleaningRobot:
 
         return x, y
 
-    def __is_position_valid(self, position: tuple[int, int]) -> bool:
-        x, y = position
-        return x >= 0 and y >= 0
-
     def __get_obstacle_position(self) -> tuple[int, int]:
         # The position of the obstacle is the position that the robot
         # would have had if it had moved forward
