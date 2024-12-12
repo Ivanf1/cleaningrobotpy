@@ -113,15 +113,7 @@ class CleaningRobot:
                 raise CleaningRobotError
 
     def __compute_new_position_on_forward(self) -> None:
-        match self.heading:
-            case self.N:
-                self.pos_y += 1
-            case self.S:
-                self.pos_y -= 1
-            case self.E:
-                self.pos_x += 1
-            case self.W:
-                self.pos_x -= 1
+        self.pos_x, self.pos_y = self.__get_future_position_after_forward_movement()
 
     def __compute_new_heading_on_rotation(self, direction: str) -> None:
         headings = (self.N, self.E, self.S, self.W)
